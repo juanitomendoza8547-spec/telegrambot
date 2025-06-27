@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "axios": "^1.7.7",
+    "child_process": "^1.0.2",
+    "recaptcha-node": "^0.2.0",
+    "recaptcha-solver": "^0.3.0",
+    "recaptcha-v3": "^1.11.3"
+  }
+}

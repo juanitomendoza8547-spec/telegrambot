@@ -1,0 +1,61 @@
+# Archivos de configuración sensibles
+*.txt
+!README.txt
+!LICENSE.txt
+
+# Logs
+logs/
+*.log
+error_log.txt
+
+# Archivos temporales
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Archivos de usuario específicos
+user_*.txt
+usuarios_tiempos.txt
+
+# Archivos de configuración local
+config.php
+database.php
+
+# Archivos de cache
+cache/
+*.cache
+
+# Archivos de sesión
+sessions/
+*.session
+
+# Archivos de datos sensibles
+banned.txt
+RitaBlock.txt
+rotate.txt
+soip.txt
+SorteoNavidad.txt
+BotProxyUrl.txt
+BotProxyUser.txt
+
+# Archivos grandes
+extra.txt
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos de composer (vendor)
+vendor/
+composer.lock
+
+# Archivos de node
+node_modules/
+package-lock.json 
