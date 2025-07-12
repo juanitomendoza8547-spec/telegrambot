@@ -39,8 +39,10 @@ if(strlen($ano ) == 2 ){
 
 $pag_host = explode("/", $url)[2];
 
-$socks5 = 'all.dc.smartproxy.com:10000';
-$rotate = 'Testingthis123:Testingpassword12+';
+// ⚠️ CONFIGURAR EN config.php
+$proxyConfig = getProxyConfig();
+$socks5 = $proxyConfig['server'] ?? 'YOUR_PROXY_SERVER';
+$rotate = $proxyConfig['auth'] ?? 'YOUR_PROXY_AUTH';
 
 $solver = null;
 

@@ -55,7 +55,9 @@ function Command($text) {
 
 
 function traducir($texto,$idioma_destino) {
-    $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw';
+    // ⚠️ CONFIGURAR API KEY EN config.php
+    $google_api_key = getGoogleTranslateApiKey();
+    $url = 'https://translation.googleapis.com/language/translate/v2?key=' . $google_api_key;
     $data = array(
         'q' => $texto,
         'target' => $idioma_destino,
@@ -124,8 +126,11 @@ $telegram = new Telegram("5456276655:AAFt3u9hGVZxA72kBJrTc9W-Bmp7CWjLJBA");
 
 
 date_default_timezone_set('America/Bogota');
-$Mi_Id = "6365131242";
-$botToken =  "5456276655:AAFt3u9hGVZxA72kBJrTc9W-Bmp7CWjLJBA";
+// ⚠️ CONFIGURACIÓN MOVIDA A config.php
+// Renombrar database/config_example.php a config.php y configurar
+require_once __DIR__ . '/config.php';
+$Mi_Id = getOwnerId();
+$botToken = getBotToken();
 $website = "https://api.telegram.org/bot".$botToken;
 $update = $telegram->getData();
 $cchatid2 = $update["callback_query"]["message"]["chat"]["id"];
@@ -167,17 +172,17 @@ $q_msg = $query["message"]["reply_to_message"]["text"];
 
 
 //------------------------------- BD Class -------------------------------
-
-$base_bot = new Database('mysql-arturo.alwaysdata.net','arturo','15112003Aa!','arturo_dior');
-
+// ⚠️ CONFIGURACIÓN MOVIDA A config.php
+$dbConfig = getDbConfig();
+$base_bot = new Database($dbConfig['host'], $dbConfig['username'], $dbConfig['password'], $dbConfig['database']);
 //------------------------------- Finish -------------------------------
 
-
 #.... Roles ...#
-define('DB_HOST', 'mysql-arturo.alwaysdata.net');
-define('DB_USERNAME', 'arturo');
-define('DB_PASSWORD', '15112003Aa!');
-define('DB_NAME', 'arturo_dior');
+// ⚠️ CONFIGURACIÓN MOVIDA A config.php  
+define('DB_HOST', $dbConfig['host']);
+define('DB_USERNAME', $dbConfig['username']);
+define('DB_PASSWORD', $dbConfig['password']);
+define('DB_NAME', $dbConfig['database']);
 define('typing', 'typing');
 
 // Define the function to forward a message to all groups

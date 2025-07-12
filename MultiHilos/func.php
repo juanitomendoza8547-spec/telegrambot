@@ -28,8 +28,10 @@ function Bradescard ($lista){
 
     $cookie = uniqid();
 
-    $socks5 = "all.dc.smartproxy.com:10000";
-    $rotate = "Testingthis123:Testingpassword12+";
+    // ⚠️ CONFIGURAR EN config.php
+    $proxyConfig = getProxyConfig();
+    $socks5 = $proxyConfig['server'] ?? 'YOUR_PROXY_SERVER';
+    $rotate = $proxyConfig['auth'] ?? 'YOUR_PROXY_AUTH';
 
 
     $cookie = uniqid();
