@@ -24,7 +24,7 @@ $cvv = $separa[3];
 $curl = new CurlX;
 $cookie = uniqid();
 
-$solver = new \CapSolver\CapSolver('CAP-5361C0C774F336BECC410D69E869566E');
+$solver = new \Capsolver\CapsolverClient('CAP-5361C0C774F336BECC410D69E869566E');
 
 
 if ($mes < 10) {

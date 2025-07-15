@@ -1,5 +1,5 @@
 {
     "require": {
-        "0qwertyy/capsolver-php": "dev-master"
+        "greezlu/capsolver-php": "^0.9.2"
     }
 }
