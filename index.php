@@ -3,15 +3,16 @@ ini_set("log_errors", TRUE);
 ini_set("error_log", "./error_log.txt");
 
 //error_reporting(E_ALL);
-ignore_user_abort(true); // optional
-ob_end_clean();
-header("Connection: close\r\n");
-header("Content-Encoding: none\r\n");
-ob_start();
-echo 'Texto que verá el usuario';
-$size = ob_get_length();
-header("Content-Length: $size");
-ob_end_flush();
+//ignore_user_abort(true); // optional
+//ob_end_clean();
+//header("Connection: close\r\n");
+//header("Content-Encoding: none\r\n");
+//ob_start();
+//echo 'Texto que verá el usuario';
+//$size = ob_get_length();
+//header("Content-Length: $size");
+//ob_end_flush();
+
 flush();
 
 
@@ -20,7 +21,7 @@ flush();
 
 //do processing here
 
-require "/home/arturo/www/MultiHilos/CardProcessor.php";
+require __DIR__ . '/MultiHilos/CardProcessor.php';
 require __DIR__ . "/Encryptions/Encryptions_Adyen.php";
 require __DIR__ . '/Telegram.php';
 require __DIR__ . '/MysqliDb.php';
