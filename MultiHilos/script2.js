@@ -4,7 +4,7 @@ const { exec } = require("child_process");
 
 function processCardData(cc, mes, ano, cvv) {
   return new Promise((resolve, reject) => {
-    const command = `php /home/arturo/www/MultiHilos/function_mass1.php ${cc} ${mes} ${ano} ${cvv}`;
+    const command = `php ${__dirname}/function_mass1.php ${cc} ${mes} ${ano} ${cvv}`;
 
     exec(command, (error, stdout, stderr) => {
       if (error) {

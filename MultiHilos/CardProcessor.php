@@ -64,7 +64,7 @@ if (isset($_GET['cards'])) {
         // Dividir los datos por saltos de línea (o por otro delimitador como ';')
         $cardArray = explode("\n", $data); // Aquí puedes usar ';' si las tarjetas están separadas por ';'
 
-        $nodeScript = '/home/arturo/www/MultiHilos/script.js';
+        $nodeScript = __DIR__ . '/script.js';
 
         // Crear una instancia de CardProcessor con los datos recibidos
         $processor = new CardProcessor($data, $nodeScript);
