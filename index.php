@@ -120,18 +120,19 @@ Chk By ⤿ <a href='tg://user?id=$userId'>$username</a>[$Rank]</b>";
 return $template;
 }
 
-$db = new MysqliDb ('mysql-arturo.alwaysdata.net','arturo','15112003Aa!','arturo_dior');
-
-$telegram = new Telegram("5456276655:AAFt3u9hGVZxA72kBJrTc9W-Bmp7CWjLJBA");
-
-
-
 date_default_timezone_set('America/Bogota');
 // ⚠️ CONFIGURACIÓN MOVIDA A config.php
 // Renombrar database/config_example.php a config.php y configurar
 require_once __DIR__ . '/config.php';
-$Mi_Id = getOwnerId();
+
+// Después de require_once __DIR__.'/config.php';
+$dbConfig = getDbConfig();
+$db = new MysqliDb($dbConfig['host'], $dbConfig['username'], $dbConfig['password'], $dbConfig['database']);
+
 $botToken = getBotToken();
+$telegram  = new Telegram($botToken);
+
+$Mi_Id = getOwnerId();
 $website = "https://api.telegram.org/bot".$botToken;
 $update = $telegram->getData();
 $cchatid2 = $update["callback_query"]["message"]["chat"]["id"];
