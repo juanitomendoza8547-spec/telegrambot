@@ -25,8 +25,7 @@ require __DIR__ . '/MultiHilos/CardProcessor.php';
 require __DIR__ . "/Encryptions/Encryptions_Adyen.php";
 require __DIR__ . '/Telegram.php';
 require __DIR__ . '/MysqliDb.php';
-require __DIR__ . '/traductor/vendor/autoload.php';
-require __DIR__ . '/traductor/Dector/vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/n9va.php';
 require __DIR__ . '/CurlX.php';
 require __DIR__ . '/userAgent.php';
@@ -34,8 +33,6 @@ require __DIR__ . '/Class_Base.php';
 require __DIR__ . '/bypass.php';
 require __DIR__ . '/NovaFormat.php';
 require __DIR__ . '/Gen_Card.php';
-require __DIR__ . '/vendor/vendor/autoload.php';
-require __DIR__ . "/Capsolver/vendor/autoload.php";
 
 use CapSolver\Solvers\Token\ReCaptchaV2;
 
