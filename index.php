@@ -1622,6 +1622,9 @@ function random_ua() {
 
 function infouser($userId) {
     global $base_bot;
+    if (empty($userId)) {
+        return false; // Return false if userId is empty to prevent SQL error
+    }
     $base_bot->conectar();
     $query = "SELECT * FROM prmiumtime WHERE userid = $userId LIMIT 1";
     $query = $base_bot->consulta($query);
