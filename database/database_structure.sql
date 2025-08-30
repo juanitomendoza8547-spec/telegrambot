@@ -5,8 +5,8 @@
 -- Ejecutar estos comandos en MySQL/MariaDB
 
 -- Crear la base de datos
-CREATE DATABASE IF NOT EXISTS `telegram_bot_cc` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `telegram_bot_cc`;
+CREATE DATABASE IF NOT EXISTS `botdb` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `botdb`;
 
 -- =======================================================
 -- TABLA: users
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `iduser` bigint(20) NOT NULL,
     `username` varchar(100) DEFAULT NULL,
     `firstname` varchar(100) DEFAULT NULL,
-    `sk_live` text DEFAULT NULL,
+    `sk_live` text,
     `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     UNIQUE KEY `unique_iduser` (`iduser`)
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `creditos` (
 CREATE TABLE IF NOT EXISTS `gateroff` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `Gater` varchar(100) NOT NULL,
-    `razon` text DEFAULT 'Maintenance',
+    `razon` VARCHAR(255) NOT NULL DEFAULT 'Maintenance',
     `status` enum('offline','online') DEFAULT 'offline',
     `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `admin` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `userid` bigint(20) NOT NULL,
     `username` varchar(100) DEFAULT NULL,
-    `permissions` text DEFAULT NULL,
+    `permissions` text,
     `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     UNIQUE KEY `unique_admin_userid` (`userid`)
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `grupos` (
 CREATE TABLE IF NOT EXISTS `banned_users` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `userid` bigint(20) NOT NULL,
-    `reason` text DEFAULT NULL,
+    `reason` text,
     `banned_by` bigint(20) DEFAULT NULL,
     `banned_at` timestamp DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `logs` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `userid` bigint(20) DEFAULT NULL,
     `action` varchar(255) NOT NULL,
-    `details` text DEFAULT NULL,
+    `details` text,
     `ip_address` varchar(45) DEFAULT NULL,
     `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `logs` (
 CREATE TABLE IF NOT EXISTS `Amx_cookie` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `userid` bigint(20) NOT NULL,
-    `cookie` text NOT NULL,
+    `cookie` text,
     `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `Amx_cookie` (
 CREATE TABLE IF NOT EXISTS `mx_cookies` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `userid` bigint(20) NOT NULL,
-    `cookies` text NOT NULL,
+    `cookies` text,
     `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
@@ -176,8 +176,8 @@ CREATE TABLE IF NOT EXISTS `mx_cookies` (
 CREATE TABLE IF NOT EXISTS `settings` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `setting_key` varchar(100) NOT NULL,
-    `setting_value` text DEFAULT NULL,
-    `description` text DEFAULT NULL,
+    `setting_value` text,
+    `description` text,
     `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     UNIQUE KEY `unique_setting_key` (`setting_key`)
@@ -192,7 +192,7 @@ INSERT INTO `settings` (`setting_key`, `setting_value`, `description`) VALUES
 ('db_host', 'localhost', 'Host de la base de datos'),
 ('db_username', 'YOUR_DB_USERNAME', 'Usuario de la base de datos'),
 ('db_password', 'YOUR_DB_PASSWORD', 'Contraseña de la base de datos'),
-('db_name', 'telegram_bot_cc', 'Nombre de la base de datos'),
+('db_name', 'botdb', 'Nombre de la base de datos'),
 ('google_translate_api_key', 'YOUR_GOOGLE_API_KEY', 'API Key de Google Translate'),
 ('proxy_server', 'YOUR_PROXY_SERVER', 'Servidor proxy para requests'),
 ('proxy_auth', 'YOUR_PROXY_AUTH', 'Autenticación del proxy');

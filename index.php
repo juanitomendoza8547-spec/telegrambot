@@ -2,7 +2,7 @@
 ini_set("log_errors", TRUE);
 ini_set("error_log", "./error_log.txt");
 
-//error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 //ignore_user_abort(true); // optional
 //ob_end_clean();
 //header("Connection: close\r\n");
@@ -177,12 +177,7 @@ $base_bot = new Database($dbConfig['host'], $dbConfig['username'], $dbConfig['pa
 //------------------------------- Finish -------------------------------
 
 #.... Roles ...#
-// ⚠️ CONFIGURACIÓN MOVIDA A config.php  
-define('DB_HOST', $dbConfig['host']);
-define('DB_USERNAME', $dbConfig['username']);
-define('DB_PASSWORD', $dbConfig['password']);
-define('DB_NAME', $dbConfig['database']);
-define('typing', 'typing');
+// ⚠️ CONFIGURACIÓN MOVIDA A config.php
 
 // Define the function to forward a message to all groups
 
