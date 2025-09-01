@@ -617,11 +617,15 @@ return $datoAleatorio;
 function ShopifyIa($url, $card ,$solver){
 
 
-$separa = explode("|", $card);
-$cc = $separa[0];
-$mes = $separa[1];
-$ano = $separa[2];
-$cvv = $separa[3];
+$parts = explode('|', (string)($card ?? ''));
+$cc  = $parts[0] ?? '';
+$mes = $parts[1] ?? '';
+$ano = $parts[2] ?? '';
+$cvv = $parts[3] ?? '';
+
+if (empty($cc) || empty($mes) || empty($ano) || empty($cvv)) {
+    return "Invalid card format.";
+}
 
 
 if ($mes < 10) {
@@ -1620,14 +1624,10 @@ function Credis($userId)
     global $roles;
     $veripremium = "SELECT * FROM creditos WHERE userdid='$userId'";
     $res = mysqli_query($roles, $veripremium);
-    if (mysqli_num_rows($res) != 0) {
-        while ($fila = mysqli_fetch_array($res)) {
-            $row = array();
-            $fila[$row];
-            return $fila;
-        }
+    if (mysqli_num_rows($res) > 0) {
+        return mysqli_fetch_assoc($res);
     } else {
-        return False;
+        return false;
     }
 }
 
@@ -1691,13 +1691,13 @@ function random_ua() {
 function infouser($userId) {
     global $base_bot;
     if (empty($userId)) {
-        return false; // Return false if userId is empty to prevent SQL error
+        return null;
     }
     $base_bot->conectar();
     $query = "SELECT * FROM prmiumtime WHERE userid = $userId LIMIT 1";
     $query = $base_bot->consulta($query);
     
-    return $query[0];
+    return $query[0] ?? null;
 }
 
 function CookieMx($userId) {
@@ -2865,11 +2865,15 @@ function add_minutes($timestamp,$minutes){
 
 function Zoura_Encr($Data, $fieldKey)
 {
-    $i = explode("|", $Data);
-    $cc = $i[0];
-    $mes = $i[1];
-    $ano = $i[2];
-    $cvv = $i[3];
+    $parts = explode('|', (string)($Data ?? ''));
+    $cc  = $parts[0] ?? '';
+    $mes = $parts[1] ?? '';
+    $ano = $parts[2] ?? '';
+    $cvv = $parts[3] ?? '';
+
+    if (empty($cc) || empty($mes) || empty($ano) || empty($cvv)) {
+        return null; // O manejar el error como prefieras
+    }
 
     $ipRan = rand(100, 999).'.'.rand(100, 999).'.'.rand(100, 999).'.'.rand(100, 999);
     $fieldToEncrypt = "#$ipRan#$cc#$cvv#$mes#$ano";
