@@ -1,4 +1,10 @@
-<?php
+<?php // 0) IGNORA visitas desde navegador / health checks
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+    http_response_code(200);
+    echo 'OK'; // evita warnings al abrir en el navegador
+    exit;
+}
+
 ini_set("log_errors", TRUE);
 ini_set("error_log", "./error_log.txt");
 
@@ -131,43 +137,105 @@ $telegram  = new Telegram($botToken);
 
 $Mi_Id = getOwnerId();
 $website = "https://api.telegram.org/bot".$botToken;
-$update = $telegram->getData();
-$cchatid2 = $update["callback_query"]["message"]["chat"]["id"];
-$callback_id = $update['callback_query']['id'];
-$messago =$update['callback_query']['message']['reply_to_message']['text'];
-$cmessage_id2 = $update["callback_query"]["message"]["message_id"];
-$cdata2 = $update["callback_query"]["data"];
-$idcallback_query = $update["callback_query"]["query_id"];
-$chatId = $update["message"]["chat"]["id"]; 
-$timestamp = $update['message']['date'];
-$chatusername = $update["message"]["chat"]["username"]; 
-$chatname = $update["message"]["chat"]["title"]; 
-$gId = $update["message"]["from"]["id"];
-$userId = $update["message"]["from"]["id"]; 
-$firstname = $update["message"]["from"]["first_name"]; 
-$username = $update["message"]["from"]["username"]; 
-$message = $update["message"]["text"]; 
-$new_chat_member = $update["message"]["new_chat_member"];
-$newusername = $update["message"]["new_chat_member"]["username"];
-$newgId = $update["message"]["new_chat_member"]["id"];
-$newfirstname = $update["message"]["new_chat_member"]["first_name"];
-$message_id = $update["message"]["message_id"]; 
-$r_id = $update["message"]["reply_to_message"];
-$r_userId = $update["message"]["reply_to_message"]["from"]["id"];  
-$r_firstname = $update["message"]["reply_to_message"]["from"]["first_name"];  
-$r_username = $update["message"]["reply_to_message"]["from"]["username"]; 
-$r_msg_id = $update["message"]["reply_to_message"]["message_id"]; 
-$r_msg = $update["message"]["reply_to_message"]["text"]; 
-$sender_chat = $update["message"]["sender_chat"]["type"]; 
-$query = $update["callback_query"];
-$CALL_TEXT_DATA = $query["data"];
-$queryId = $query["id"];
-$queryUserId = $query["from"]["id"];
-$queryName = $query["from"]["first_name"];
-$CALL_CHAT_MESSAGE_ID  = $query["message"]["message_id"];
-$CALL_CHAT_ID = $query["message"]["chat"]["id"];
-$queryOriginId = $query["message"]["reply_to_message"]["from"]["id"];
-$q_msg = $query["message"]["reply_to_message"]["text"];
+// 1) OBTÉN Y VALIDA EL UPDATE
+$raw = file_get_contents('php://input');
+$update = json_decode($raw, true);
+if (!is_array($update)) {
+    http_response_code(200);
+    echo 'NO_UPDATE';
+    exit;
+}
+
+// 2) NORMALIZA A $event (no leas $update[...] directo)
+$event = [
+    'type' => null,
+    'chat_id' => null,
+    'user_id' => null,
+    'message_id' => null,
+    'text' => null,
+    'data' => null, // callback_query data
+    'chat_title' => null,
+    'reply_to_mid' => null,
+];
+
+if (isset($update['callback_query'])) {
+    $cq = $update['callback_query'];
+    $msg = $cq['message'] ?? [];
+    $event['type'] = 'callback_query';
+    $event['chat_id'] = $msg['chat']['id'] ?? null;
+    $event['user_id'] = $cq['from']['id'] ?? null;
+    $event['message_id'] = $msg['message_id'] ?? null;
+    $event['data'] = $cq['data'] ?? null;
+    $event['chat_title'] = $msg['chat']['title'] ?? null;
+    $event['reply_to_mid']= $msg['reply_to_message']['message_id'] ?? null;
+
+} elseif (isset($update['message'])) {
+    $msg = $update['message'];
+    $event['type'] = 'message';
+    $event['chat_id'] = $msg['chat']['id'] ?? null;
+    $event['user_id'] = $msg['from']['id'] ?? null;
+    $event['message_id'] = $msg['message_id'] ?? null;
+    $event['text'] = $msg['text'] ?? null;
+    $event['chat_title'] = $msg['chat']['title'] ?? null;
+    $event['reply_to_mid']= $msg['reply_to_message']['message_id'] ?? null;
+
+} elseif (isset($update['channel_post'])) {
+    $msg = $update['channel_post'];
+    $event['type'] = 'channel_post';
+    $event['chat_id'] = $msg['chat']['id'] ?? null;
+    $event['message_id'] = $msg['message_id'] ?? null;
+    $event['text'] = $msg['text'] ?? null;
+    $event['chat_title'] = $msg['chat']['title'] ?? null;
+}
+
+// 3) VARIABLES CÓMODAS & COMPATIBILIDAD
+$chatId = $event['chat_id'];
+$userId = $event['user_id'];
+$message_id = $event['message_id'];
+$text = $event['text'] ?? '';
+$message = $event['text'] ?? '';
+$cqData = $event['data'] ?? '';
+$cdata2 = $event['data'] ?? '';
+$chatName = $event['chat_title'];
+$r_msg_id = $event['reply_to_mid'];
+
+// Variables de Mensaje
+$firstname = $update['message']['from']['first_name'] ?? null;
+$username = $update['message']['from']['username'] ?? null;
+$gId = $update['message']['from']['id'] ?? null;
+$timestamp = $update['message']['date'] ?? null;
+$chatusername = $update['message']['chat']['username'] ?? null;
+$r_userId = $update['message']['reply_to_message']['from']['id'] ?? null;
+$r_firstname = $update['message']['reply_to_message']['from']['first_name'] ?? null;
+$r_username = $update['message']['reply_to_message']['from']['username'] ?? null;
+$r_msg = $update['message']['reply_to_message']['text'] ?? null;
+$new_chat_member = $update['message']['new_chat_member'] ?? null;
+$newusername = $update['message']['new_chat_member']['username'] ?? null;
+$newgId = $update['message']['new_chat_member']['id'] ?? null;
+$newfirstname = $update['message']['new_chat_member']['first_name'] ?? null;
+$sender_chat = $update['message']['sender_chat']['type'] ?? null;
+
+// Variables de Callback Query
+if (isset($update['callback_query'])) {
+    $cchatid2 = $event['chat_id'];
+    $cmessage_id2 = $event['message_id'];
+    $callback_id = $update['callback_query']['id'] ?? null;
+    $idcallback_query = $update['callback_query']['id'] ?? null;
+    $queryId = $update['callback_query']['id'] ?? null;
+    $queryUserId = $event['user_id'];
+    $queryName = $update['callback_query']['from']['first_name'] ?? null;
+    $CALL_CHAT_MESSAGE_ID = $event['message_id'];
+    $CALL_CHAT_ID = $event['chat_id'];
+    $queryOriginId = $update['callback_query']['message']['reply_to_message']['from']['id'] ?? null;
+    $q_msg = $update['callback_query']['message']['reply_to_message']['text'] ?? null;
+    $messago = $update['callback_query']['message']['reply_to_message']['text'] ?? null;
+    $CALL_TEXT_DATA = $event['data'];
+    
+    // Sobrescribir variables de usuario si es un callback
+    $firstname = $update['callback_query']['from']['first_name'] ?? $firstname;
+    $username = $update['callback_query']['from']['username'] ?? $username;
+    $gId = $event['user_id'] ?? $gId;
+}
 
 
 //------------------------------- BD Class -------------------------------

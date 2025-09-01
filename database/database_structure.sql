@@ -5,8 +5,8 @@
 -- Ejecutar estos comandos en MySQL/MariaDB
 
 -- Crear la base de datos
-CREATE DATABASE IF NOT EXISTS `botdb` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `botdb`;
+CREATE DATABASE IF NOT EXISTS `telegrambot` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `telegrambot`;
 
 -- =======================================================
 -- TABLA: users
